@@ -1,0 +1,15 @@
+---
+backup:
+  directory: ~/data/backups/sites
+  max_files_to_keep: 7
+  dump_folder_name: databases
+  archive_folder_name: archives
+database:
+  user: user_with_dump_rights
+  password: password_user_with_dump_rights
+logger:
+  level: info # debug, info, warn, error
+  path: ~/data/backups/logs
+  max_size: 10 # megabytes
+  max_age: 7 # days
+  max_backups: 3
