@@ -1,11 +1,16 @@
 #!/bin/sh
 
 set -e
+if [ -z "${HOME}" ]; then
+    echo "❗ Please set your \$HOME environment variable"
+    echo "❗ maybe try 'export HOME=/path/to/home;"
+    exit 1
+fi
 
 if [ -z "${BIN_DIR}" ]; then
 	BIN_DIR=$(pwd)
 fi
-
+DIR_CONFIG=$HOME/.config/labinc-backuper
 THE_ARCH_BIN=""
 DEST=${BIN_DIR}/labinc-backuper
 
@@ -73,10 +78,20 @@ fi
 
 tar -zxf "${DEST}"
 chmod u+x labinc-backuper
-mv .labinc-backuper.example.yaml .labinc-backuper.yaml
+
+if [ ! -d $DIR_CONFIG ]; then
+    mkdir -p $DIR_CONFIG
+fi
+if [ -f "$DIR_CONFIG/.labinc-backuper.yaml" ]; then
+    echo
+    echo "⚠️ ${bold}.labinc-backuper.yaml${normal} already exists in your home directory"
+    echo "\t it will be renamed to ${bold}.labinc-backuper.yaml.$(date +%s).bak${normal}"
+    mv $DIR_CONFIG/.labinc-backuper.yaml $DIR_CONFIG/.labinc-backuper.yaml.$(date +%Y%m%d%H%M%S).bak
+fi
+mv .labinc-backuper.example.yaml $DIR_CONFIG/.labinc-backuper.yaml
 
 echo
-echo "🥳 labinc-backuper downloaded successfully to ${italic}${DEST}${normal}"
+echo "🥳 labinc-backuper installed successfully to ${italic}${DEST}${normal}"
 echo "👉 edit the config file: ${bold}.labinc-backuper.yaml${normal}"
 echo "🔧 Run it with ${bold}./labinc-backuper${normal}"
 echo

@@ -39,10 +39,7 @@ func initConfig() error {
 	once.Do(func() {
 		viper.SetConfigName(".labinc-backuper") // name of config file (without extension)
 		viper.SetConfigType("yaml")
-
-		viper.AddConfigPath(".")
 		viper.AddConfigPath("$HOME/.config/labinc-backuper")
-		viper.AddConfigPath("$HOME")
 		viper.SetEnvPrefix("LABINC")
 		viper.AutomaticEnv()
 
