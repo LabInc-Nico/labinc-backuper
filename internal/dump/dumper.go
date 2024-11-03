@@ -25,7 +25,7 @@ import (
 func Dump(dbname string) (string, error) {
 	dumpDir := filepath.Join(viper.GetString("backup.directory"), viper.GetString("backup.dump_folder_name"))
 
-	dumpFilenameFormat := fmt.Sprintf("%s-20060102T150405", dbname)
+	dumpFilenameFormat := "20060102T150405"
 
 	db, err := sql.Open("mysql",
 		fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
@@ -50,6 +50,9 @@ func Dump(dbname string) (string, error) {
 	}
 
 	dumper.Close()
+	dumpFinalName := filepath.Join(dumpDir, dbname+"-"+filepath.Base(resultFilename))
+	fmt.Printf("Dumped database %s \n", dumpFinalName)
+	os.Rename(resultFilename, dumpFinalName)
 	utils.Clean(dumpDir, dbname, viper.GetInt("backup.max_files_to_keep"))
-	return resultFilename, nil
+	return dumpFinalName, nil
 }
